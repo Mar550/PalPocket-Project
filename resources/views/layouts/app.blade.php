@@ -103,4 +103,14 @@
 $(document).ready( function () {
   var table = $('#example').DataTable();
 } );
+
+$('#example').dataTable( {
+  "columns": [
+    { "width": "8%" },
+    { "width": "40%" },
+    { "width": "15%" },
+    { "width": "15%" },
+    { "width": "22%" },
+  ]
+} );
 </script>

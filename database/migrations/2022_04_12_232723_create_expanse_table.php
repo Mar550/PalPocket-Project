@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('expanse', function (Blueprint $table) {
             $table->id();
+            $table->string('wording');
+            $table->string('amount');
+            $table->string('date');
+            $table->string('receipt');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

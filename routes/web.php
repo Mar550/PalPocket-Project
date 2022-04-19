@@ -18,8 +18,8 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/income', [App\Http\Controllers\IncomeController::class, 'index'])->name('pocket.income');
+Route::get('home', [App\Http\Controllers\HomeController::class,'index'])->name('home');
+Route::get('income', [App\Http\Controllers\IncomeController::class,'create'])->name('create');
+Route::post('store', [App\Http\Controllers\IncomeController::class,'store'])->name('store');
 Route::get('/expanse', [App\Http\Controllers\ExpanseController::class, 'index'])->name('pocket.expanse');
 Route::get('/chart', [App\Http\Controllers\ChartController::class, 'index'])->name('pocket.chart');
