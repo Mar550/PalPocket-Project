@@ -21,29 +21,30 @@
       </div>
       <div class="modal-body">
 
-        <form method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
+        <form id="form" method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
         @csrf
-
             <div class="input-group mb-3">
-                <input class="form-control" type="text" placeholder="Description" name="description">
+                <input id="description" class="form-control" type="text" placeholder="Description" name="description">
             </div>
+            <span> {{ $errors->first('description')}} </span>
 
             @error('description')
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
+                    <strong id="descriptionError">{{ $message }}</strong>
                 </span> 
             @enderror           
 
             <div class="input-group mb-3">
-                <input type="text" class="form-control" name="amount" placeholder="Amount" aria-label="Amount (to the nearest dollar)">
+                <input id="amount" type="text" class="form-control" name="amount" placeholder="Amount" aria-label="Amount (to the nearest dollar)">
                 <div class="input-group-append">
                     <span class="input-group-text"> € </span>
                 </div>
             </div>
+            <span> {{ $errors->first('amount')}} </span>
 
             @error('amount')
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
+                    <strong id="amountError">{{ $message }}</strong>
                 </span> 
             @enderror
 
@@ -51,29 +52,28 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
                 </div>
-                <input type="date" class="form-control" name="date" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <input type="date" id="date" class="form-control" name="date" aria-label="Default" aria-describedby="inputGroup-sizing-default">
             </div>
+            <span> {{ $errors->first('date')}} </span>
 
             @error('date')
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
+                    <strong id="dateError">{{ $message }}</strong>
                 </span> 
             @enderror
             
-
             <div class="input-group mb-3">
-                <input id="receipt" type="file" class="form-control" name="receipt"  required autocomplete="receipt" autofocus>
+                <input id="receipt" type="file" class="form-control" name="receipt"  >
                     @error('receipt')
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
+                            <strong id="receiptError">{{ $message }}</strong>
                         </span> 
                     @enderror
             </div>
-
-            
+            <span> {{ $errors->first('receipt')}} </span>
 
             <div class="modal-footer">
-        <button type="submit" class="btn btn-primary"> Create </button>
+        <button type="submit"  class="btn btn-primary"> Create </button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
 
@@ -146,6 +146,40 @@
     </table>
 </div>
 
+<script type="text/javascript">
+
+$('#form').on('submit',function(e){
+    let description = $('#description').val();
+    let amount = $('#amount').val();
+    let date = $('#date').val();
+    let receipt = $('#receipt').val();
+    $.ajax({
+      type:"POST",
+      url: "/store",
+      data:{
+        "_token": "{{ csrf_token() }}",
+        description:description,
+        amount:amount,
+        date:date,
+        receipt:receipt,
+      },
+      success:function(response){
+        $('#successMsg').show();
+        console.log(response);
+      },
+      error: function(response) {
+        $('#staticBackdrop').modal('show')
+        $('#descriptionError').text(response.responseJSON.errors.description);
+        $('#amountError').text(response.responseJSON.errors.amount);
+        $('#dateError').text(response.responseJSON.errors.date);
+        $('#receiptError').text(response.responseJSON.errors.receipt);
+      },
+
+      });
+    });
+  </script>
 
 @endsection
+
+
 

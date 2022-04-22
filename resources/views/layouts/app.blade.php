@@ -113,4 +113,5 @@ $('#example').dataTable( {
     { "width": "22%" },
   ]
 } );
+
 </script>
