@@ -22,7 +22,8 @@ class IncomeController extends Controller
      */
     public function index()
     {
-        return view('pocket.income');
+        $incomes = Income::orderBy('id','asc')->get();
+        return view('pocket.income', compact('incomes'));
     }
 
     /**
@@ -32,8 +33,7 @@ class IncomeController extends Controller
      */
     public function create()
     {
-        $users = User::all();
-        return view('pocket.income', compact('users'));
+
     }
 
     /**
@@ -45,11 +45,18 @@ class IncomeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'description' => 'required|min:5|max:12',
+            'description' => 'required|string|max:255',
+            'amount' => 'required|max:25',
+            'date' => 'required',
+            'receipt' => 'max:2048'
         ],[
-            'description.required' => 'The description of the income  name is required',
-            'description.min' => 'More than 5',
-            'description.max' => 'Less than 12'
+            'description.required' => 'The description of the income is required',
+            'description.string' => 'The description should contain string characters',
+            'description.max' => 'The description should contain a maximum of 255 characters',
+            'amount.required' => 'The amount is required',
+            'amount.max' => 'The amount is too high',
+            'date.required' => 'The date is required',
+            'receipt.max' => 'The maximum upload file size is 2M'
         ]);
 
         $path = $request->file('receipt')->store('public/files');
@@ -60,7 +67,7 @@ class IncomeController extends Controller
         $income ->date = $request->input('date');
         $income ->receipt = $path;
         $income->save();
-        
+        return $income;
     }
 
     /**

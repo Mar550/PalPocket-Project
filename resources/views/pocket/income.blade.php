@@ -89,60 +89,41 @@
 
 <!-- Table -->
 <table id="example" class="table table-striped table-bordered" style="width:100%">
+
         <thead>
             <tr>
                 <th id="thid">Id</th>
-                <th id="thwording">Wording</th>
+                <th id="thwording">Description</th>
                 <th id="thamount">Amount</th>
                 <th id="thdaet">Date</th>
                 <th id="thinvoice">Receipt</th>
+                <th>  </th>
             </tr>
         </thead>
+        @forelse($incomes as $inc)
+
         <tbody>
             <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>$320,800</td>
+                <td>{{ $inc->id }}</td>
+                <td>{{ $inc->description }}</td>
+                <td>{{ $inc->amount }} €</td>
+                <td>{{ $inc->date }}</td>
+                <td>{{ $inc->receipt }}</td>
+                <td> 
+                    <div class="icones">
+                    <i class="fa-solid fa-trash-can"> </i> 
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    </div>
+                </td>
             </tr>
-            <tr>
-                <td>Garrett Winters</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>63</td>
-                <td>$170,750</td>
-            </tr>
-            <tr>
-                <td>Ashton Cox</td>
-                <td>Junior Technical Author</td>
-                <td>San Francisco</td>
-                <td>66</td>
-                <td>$86,000</td>
-            </tr>
-            <tr>
-                <td>Cedric Kelly</td>
-                <td>Senior Javascript Developer</td>
-                <td>Edinburgh</td>
-                <td>22</td>
-                <td>$433,060</td>
-            </tr>
-            <tr>
-                <td>Airi Satou</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>33</td>
-                <td>$162,700</td>
-            </tr>
-            <tr>
-                <td>Brielle Williamson</td>
-                <td>Integration Specialist</td>
-                <td>New York</td>
-                <td>61</td>
-                <td>$372,000</td>
-            </tr>
+            
              
-        </tbody> 
+        </tbody>
+        @empty
+        <tr>
+            No income added 
+        </tr>
+        @endforelse
     </table>
 </div>
 

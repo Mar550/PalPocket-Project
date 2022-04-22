@@ -10,3 +10,12 @@ body {
 .modal-title{
   text-align: center;
 }
+
+.icones{
+  display: flex;
+  flex-direction: column;
+}
+
+i{
+  color:red;
+}
