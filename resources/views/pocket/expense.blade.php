@@ -4,7 +4,7 @@
 
 <div class="container">
     <div>
-        <h1> Income </h1>
+        <h1> Expense </h1>
         <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
   ADD NEW
@@ -15,13 +15,12 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">  NEW INCOME </h5>
+        <h5 class="modal-title" id="staticBackdropLabel">  NEW EXPENSE </h5>
         <br>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-
-        <form id="form" method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
+      <form id="form" method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
         @csrf
             <div class="input-group mb-3">
                 <input id="description" class="form-control" type="text" placeholder="Description" name="description">
@@ -78,6 +77,7 @@
       </div>
 
         </form>
+        
       </div>
       
     </div>
@@ -101,15 +101,15 @@
             </tr>
         </thead>
 
-        @forelse($incomes as $income)
+        @forelse($expenses as $expense)
 
         <tbody>
             <tr>
-                <td>{{ $income->id }}</td>
-                <td>{{ $income->description }}</td>
-                <td>{{ $income->amount }} €</td>
-                <td>{{ $income->date }}</td>
-                <td>{{ $income->receipt }}</td>
+                <td>{{ $expense->id }}</td>
+                <td>{{ $expense->description }}</td>
+                <td>{{ $expense->amount }} €</td>
+                <td>{{ $expense->date }}</td>
+                <td>{{ $expense->receipt }}</td>
                 <td> 
                     <div class="icones">
                     <i style="color:orange;font-size:20px"class="fa-solid fa-pen-to-square"></i>
@@ -118,6 +118,7 @@
                 </td>
             </tr>
             
+             
         </tbody>
         @empty
         <tr>
@@ -136,7 +137,7 @@ $('#form').on('submit',function(e){
     let receipt = $('#receipt').val();
     $.ajax({
       type:"POST",
-      url: "/store",
+      url: "/storeexpense",
       data:{
         "_token": "{{ csrf_token() }}",
         description:description,

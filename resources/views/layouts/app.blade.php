@@ -112,7 +112,7 @@ $('#example').dataTable( {
     { "width": "15%" },
     { "width": "15%" },
     { "width": "16%" },
-    { "width": "100%" },
+    { "width": "6%" },
   ]
 } );
 

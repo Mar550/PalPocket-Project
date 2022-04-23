@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('expanse', function (Blueprint $table) {
+        Schema::create('expense', function (Blueprint $table) {
             $table->id();
-            $table->string('wording');
+            $table->string('description');
             $table->string('amount');
             $table->string('date');
             $table->string('receipt');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expanse');
+        Schema::dropIfExists('expense');
     }
 };

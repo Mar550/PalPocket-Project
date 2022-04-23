@@ -22,5 +22,7 @@ Route::get('home', [App\Http\Controllers\HomeController::class,'index'])->name('
 Route::get('income', [App\Http\Controllers\IncomeController::class,'index'])->name('index');
 Route::post('store', [App\Http\Controllers\IncomeController::class,'store'])->name('store');
 
-Route::get('/expanse', [App\Http\Controllers\ExpanseController::class, 'index'])->name('pocket.expanse');
+Route::get('expense', [App\Http\Controllers\ExpenseController::class,'index'])->name('index');
+Route::post('store', [App\Http\Controllers\ExpenseController::class,'store'])->name('store');
+
 Route::get('/chart', [App\Http\Controllers\ChartController::class, 'index'])->name('pocket.chart');

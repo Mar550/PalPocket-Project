@@ -9,6 +9,8 @@ class Expense extends Model
 {
     protected $guarded = [];
 
+    protected $table = 'expense';
+
     public function user() 
     {
         return $this->belongsTo(User::class, 'user_id');
