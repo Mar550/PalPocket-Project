@@ -18,11 +18,19 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('home', [App\Http\Controllers\HomeController::class,'index'])->name('home');
-Route::get('income', [App\Http\Controllers\IncomeController::class,'index'])->name('index');
-Route::post('store', [App\Http\Controllers\IncomeController::class,'store'])->name('store');
 
-Route::get('expense', [App\Http\Controllers\ExpenseController::class,'index'])->name('index');
-Route::post('store', [App\Http\Controllers\ExpenseController::class,'store'])->name('store');
+Route::prefix('income')->group(function(){
+    Route::get('home', [App\Http\Controllers\HomeController::class,'index'])->name('home');
+    Route::get('index', [App\Http\Controllers\IncomeController::class,'index'])->name('income.index');
+    Route::post('store', [App\Http\Controllers\IncomeController::class,'store'])->name('income.store');
+    Route::get('edit/{id}', [App\Http\Controllers\IncomeController::class,'edit'])->name('income.edit');
+});
+
+Route::prefix('expense')->group(function(){
+    Route::get('index', [App\Http\Controllers\ExpenseController::class,'index'])->name('expense.index');
+    Route::post('store', [App\Http\Controllers\ExpenseController::class,'store'])->name('expense.store');
+    Route::post('edit/{id}', [App\Http\Controllers\ExpenseController::class,'edit'])->name('expense.edit');
+    Route::put('update/{id}', [App\Http\Controllers\ExpenseController::class,'update'])->name('expense.update');
+});
 
 Route::get('/chart', [App\Http\Controllers\ChartController::class, 'index'])->name('pocket.chart');

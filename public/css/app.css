@@ -11286,3 +11286,25 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+i{
+  color: orange;
+  font-size: 22px;
+  margin-left:10px
+}
+
+i{
+  cursor:pointer;
+}
+
+#icone2{
+  color:red;
+  font-size:22px;
+  margin-left:10px
+}
+
+#icone2:hover{
+  cursor:pointer;
+}
+
+

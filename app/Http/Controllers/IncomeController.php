@@ -8,6 +8,7 @@ use App\Models\Income;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class IncomeController extends Controller
 {
@@ -89,7 +90,8 @@ class IncomeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $income = Income::find($id);
+        
     }
 
     /**
@@ -101,7 +103,16 @@ class IncomeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $income = Income::find($id);
+        $income->description = $request->description;
+        $income->amount = $request->amount;
+        $income->date = $request->date;
+        $receipt = $income->receipt;
+        if($request->file('receipt')) {
+            Storage::delete($receipt);
+            $receipt = $request->file('receipt')->store('public/files');
+        }
+        $income->image = $receipt;
     }
 
     /**

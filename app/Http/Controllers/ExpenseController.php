@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Expense;
+use Illuminate\Support\Facades\Storage;
 
 class ExpenseController extends Controller
 {
@@ -86,9 +87,9 @@ class ExpenseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $expense = Expense::find($id);
+        return view('pocket.expense',['expense'=>$expense]);
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -98,7 +99,18 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $expense = Expense::find($id);
+        $expense->description = $request->description;
+        $expense->amount = $request->amount;
+        $expense->date = $request->date;
+        $receipt = $expense->receipt;
+        if($request->file('receipt')) {
+            Storage::delete($receipt);
+            $receipt = $request->file('receipt')->store('public/files');
+        }
+        $expense->receipt = $receipt;
+        $expense->update();
+        return redirect()->route('home');           
     }
 
     /**
