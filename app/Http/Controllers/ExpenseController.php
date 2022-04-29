@@ -20,8 +20,8 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenses = Expense::orderBy('id','asc')->get();
-        return view('pocket.expense', compact('expenses'));
+        $expense = Expense::orderBy('id','asc')->get();
+        return view('pocket.expense', compact('expense'));
     }
 
     /**
@@ -87,8 +87,8 @@ class ExpenseController extends Controller
      */
     public function edit($id)
     {
-        $expense = Expense::find($id);
-        return view('pocket.expense',['expense'=>$expense]);
+        $expense = Expense::findOrFail($id);
+        return view('pocket.editexpense',['expense'=>$expense]);
     }
     /**
      * Update the specified resource in storage.
@@ -99,7 +99,7 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $expense = Expense::find($id);
+        $expense = Expense::find($id)->first();
         $expense->description = $request->description;
         $expense->amount = $request->amount;
         $expense->date = $request->date;
@@ -110,7 +110,7 @@ class ExpenseController extends Controller
         }
         $expense->receipt = $receipt;
         $expense->update();
-        return redirect()->route('home');           
+        return redirect()->route('expense.index');           
     }
 
     /**
@@ -121,6 +121,10 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $expense = Expense::find($id);
+        if ($expense != null) {
+            $expense->delete();
+        }
+        return redirect()->route('expense.index');
     }
 }

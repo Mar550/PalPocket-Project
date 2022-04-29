@@ -23,10 +23,9 @@ class IncomeController extends Controller
      */
     public function index()
     {
-        $incomes = Income::orderBy('id','asc')->get();
-        return view('pocket.income', compact('incomes'));
+        $income = Income::orderBy('id','asc')->get();
+        return view('pocket.income', compact('income'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -61,7 +60,6 @@ class IncomeController extends Controller
         ]);
 
         $path = $request->file('receipt')->store('public/files');
-
         $income = new Income;
         $income ->description = $request->input('description');
         $income ->amount = $request->input('amount');
@@ -90,8 +88,8 @@ class IncomeController extends Controller
      */
     public function edit($id)
     {
-        $income = Income::find($id);
-        
+        $income = Income::findOrFail($id);
+        return view('pocket.editincome',['income'=>$income]);
     }
 
     /**
@@ -103,7 +101,7 @@ class IncomeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $income = Income::find($id);
+        $income = Income::findOrFail($id);
         $income->description = $request->description;
         $income->amount = $request->amount;
         $income->date = $request->date;
@@ -112,7 +110,9 @@ class IncomeController extends Controller
             Storage::delete($receipt);
             $receipt = $request->file('receipt')->store('public/files');
         }
-        $income->image = $receipt;
+        $income->receipt = $receipt;
+        $income->update();
+        return redirect()->route('income.index');           
     }
 
     /**
@@ -123,6 +123,10 @@ class IncomeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $income = Income::find($id);
+        if ($income != null) {
+            $income->delete();
+        }
+        return redirect()->route('income.index');
     }
 }
