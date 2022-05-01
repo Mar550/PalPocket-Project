@@ -67,6 +67,7 @@ class IncomeController extends Controller
         $income ->receipt = $path;
         $income->save();
         return $income;
+        return redirect()->route('income.index');
     }
 
     /**

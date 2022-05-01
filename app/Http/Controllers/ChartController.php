@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Income;
+use App\Models\Expense;
+use App\Models\Chart;
+use Cron\MonthField;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChartController extends Controller
 {
@@ -17,8 +22,15 @@ class ChartController extends Controller
      */
     public function index()
     {
-        return view('pocket.chart');
-
+        $month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        $date = Income::select('date')->get();
+        $selectmonth = Income::whereMonth('date','=','month')->get();
+        $summonth = DB::table('income')->sum('income.amount');
+        $dataincome = Income::select('amount')->get();
+        $dataexpense = Expense::select('amount')->get();
+        $incdate = Income::select('date')->get();
+        $expdate = Expense::select('date')->get();
+        return view('pocket.chart', compact('dataincome','dataexpense','incdate','expdate','selectmonth','summonth'))->with('month',json_encode($month,JSON_NUMERIC_CHECK));
     }
 
     /**

@@ -36,4 +36,4 @@ Route::prefix('expense')->group(function(){
     Route::put('delete/{id}', [App\Http\Controllers\ExpenseController::class,'destroy'])->name('expense.delete');
 });
 
-Route::get('/chart', [App\Http\Controllers\ChartController::class, 'index'])->name('pocket.chart');
+Route::get('chart', [App\Http\Controllers\ChartController::class, 'index'])->name('chart');

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chart extends Model
 {
-    public function incomee() 
+    public function income() 
     {
         return $this->hasMany(Income::class, 'income_id');
     }
