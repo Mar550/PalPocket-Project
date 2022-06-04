@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('description');
             $table->bigInteger('amount');
-            $table->string('date');
+            $table->date('date');
             $table->string('receipt')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();

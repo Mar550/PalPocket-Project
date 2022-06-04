@@ -6,9 +6,13 @@
         <h1> Chart Page </h1>
         <p> {{$dataincome}} </p>
         <p> {{$dataexpense}} </p>
-        <p> {{$month}} </p>
         <p> {{$selectmonth}} </p>
-        <p> {{$summonth}} </p>
+        <p> {{$expdate}} </p>
+        <p> {{$montanttotal}} </p>
+        <p> {{$may}} </p>
+
+
+
     </div>
     
     <div style="display:flex; flex-direction:row">
@@ -29,16 +33,27 @@
 <script>  
 var month = <?php echo $month; ?>;
 var income = <?php echo $dataincome; ?>;
-    
+var jan = <?php echo $jan; ?>;
+var feb = <?php echo $feb; ?>;
+var mar = <?php echo $mar; ?>;
+var apr = <?php echo $apr; ?>;
+var may = <?php echo $may; ?>;
+var jun = <?php echo $jun; ?>;
+var jul = <?php echo $jul; ?>;
+var aug = <?php echo $aug; ?>;
+var sep = <?php echo $sep; ?>;
+var oct = <?php echo $oct; ?>;
+var nov = <?php echo $nov; ?>;
+var dec = <?php echo $dec; ?>;
 
 const ctx = document.getElementById('myChart').getContext('2d');
 const myChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'line',
     data: {
         labels: month,
         datasets: [{
             label: 'Incomes',
-            data: [12, 19, 3, 5, 2, 3],
+            data: [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec],
             backgroundColor:"transparent",
             borderColor: [
                 'rgba(255, 99, 132, 1)',

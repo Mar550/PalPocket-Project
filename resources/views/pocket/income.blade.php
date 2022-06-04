@@ -116,7 +116,7 @@
                     <form  action="{{ route('income.delete', $inc->id) }}" method="POST" > 
                         @method('DELETE')
                         @csrf       
-                      <button type="submit" class="btn btn-primary" id="delete"> <i id="icone2" class="fa-solid fa-trash-can"> </i> </button>
+                      <button type="submit" class="btn btn-primary" id="4"> <i id="icone2" class="fa-solid fa-trash-can"> </i> </button>
                     </form>                    
                     </div>
                 </td>

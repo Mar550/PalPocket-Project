@@ -65,7 +65,7 @@ class ExpenseController extends Controller
         $expense ->date = $request->input('date');
         $expense ->receipt = $path;
         $expense->save();
-        return $expense;
+        return redirect()->route('expense.index');
     }
 
     /**
