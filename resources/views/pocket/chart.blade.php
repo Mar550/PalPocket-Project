@@ -12,7 +12,6 @@
         <p> {{$may}} </p>
 
 
-
     </div>
     
     <div style="display:flex; flex-direction:row">
@@ -25,7 +24,12 @@
             </ul>
         </div>
     </div>
-        
+    <div>
+        <h2> Sort by </h2>
+        <button onClick="showChart('daily')"> Day </button>
+        <button onClick="showChart('monthly')"> Month </button>
+        <button onClick="showChart('yearly')"> Year </button>
+    </div>
 <div> 
 <canvas id="myChart" width="400" height="200"></canvas>
 </div>
@@ -33,6 +37,23 @@
 <script>  
 var month = <?php echo $month; ?>;
 var income = <?php echo $dataincome; ?>;
+
+var dataObjects = [
+  {
+    label: "Datasets 1",
+    data: [2018, 2019, 2020, 2021, 2022]
+  },
+  {
+    label: "Datasets 2",
+    data: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  },
+  {
+    label: "Datasets 3",
+    data: [5,10,15,20,25,30]
+  }
+]
+// data: dataObjects[0].data,
+
 var jan = <?php echo $jan; ?>;
 var feb = <?php echo $feb; ?>;
 var mar = <?php echo $mar; ?>;
@@ -45,6 +66,10 @@ var sep = <?php echo $sep; ?>;
 var oct = <?php echo $oct; ?>;
 var nov = <?php echo $nov; ?>;
 var dec = <?php echo $dec; ?>;
+var dec = <?php echo $amountMonth; ?>;
+
+
+
 
 const ctx = document.getElementById('myChart').getContext('2d');
 const myChart = new Chart(ctx, {
@@ -96,23 +121,39 @@ const myChart = new Chart(ctx, {
         datasets: [{
             label:'Income',
             backgroundColor:"Yellow",
-            data: amount
+            data: amountMonth
         }]
     }
 
-    window.onload = function() {
-        var ctx= document.getElementById("canvas").getContect("2d");
-        window.myBar = new Chart(ctx, {
-            type: 'bar',
-            data:chartData,
-            options: {
-                responsive:true,
-                title: {
-                    display:true,
-                    text: "Yearly Income per month"
+    window.onload = function showChart(type) {
+        if(type === 'monthly') {
+            var ctx= document.getElementById("canvas").getContect("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'bar',
+                data:chartData,
+                options: {
+                    responsive:true,
+                    title: {
+                        display:true,
+                        text: " Income per month"
+                    }
                 }
-            }
-        })
+            })
+        }
+        if(type === 'daily') {
+            var ctx= document.getElementById("canvas").getContect("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'bar',
+                data:chartData,
+                options: {
+                    responsive:true,
+                    title: {
+                        display:true,
+                        text: " Income per day"
+                    }
+                }
+            })
+        }
     }
 
 </script>

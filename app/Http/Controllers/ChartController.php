@@ -45,8 +45,36 @@ class ChartController extends Controller
         $oct = DB::table('income')->whereMonth('date','10')->get('income.amount')->sum('amount');
         $nov = DB::table('income')->whereMonth('date','11')->get('income.amount')->sum('amount');
         $dec = DB::table('income')->whereMonth('date','12')->get('income.amount')->sum('amount');
-        
-        return view('pocket.chart', compact('dataincome','dataexpense','incomedate','expdate','selectmonth','montanttotal','jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'))->with('month',json_encode($month,JSON_NUMERIC_CHECK));
+         
+        // TESTS
+        $annees = ['2018','2019','2020','2021','2022'];
+        $mois = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+        $jours = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'];
+
+            foreach($annees as $annee){
+                $amountYear = DB::table('income')->whereYear('date',$annee)->get('income.amount')->sum('amount');
+                foreach($mois as $moi) {
+                    $amountMonth = DB::table('income')->whereYear('date',$annee)->whereMonth('date',$moi)->get('income.amount')->sum('amount');
+                    foreach($jours as $jour){
+                        $amountDay = DB::table('income')->whereYear('date',$annee)->whereMonth('date',$moi)->whereDay('date',$jour)->get('income.amount')->sum('amount');
+                    }
+                }
+            }
+
+            foreach($annees as $annee){
+                $amountYear = DB::table('expense')->whereYear('date',$annee)->get('expense.amount')->sum('amount');
+                foreach($mois as $moi) {
+                    $amountMonth = DB::table('expense')->whereYear('date',$annee)->whereMonth('date',$moi)->get('expense.amount')->sum('amount');
+                    foreach($jours as $jour){
+                        $amountDay = DB::table('expense')->whereYear('date',$annee)->whereMonth('date',$moi)->whereDay('date',$jour)->get('expense.amount')->sum('amount');
+                    }
+                }
+            }
+            
+
+            
+            
+        return view('pocket.chart', compact('dataincome','dataexpense','incomedate','expdate','selectmonth','montanttotal','jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec','amountMonth'))->with('month',json_encode($month,JSON_NUMERIC_CHECK));
     }
 
      /**
