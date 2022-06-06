@@ -2,17 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div>
-        <h1> Chart Page </h1>
-        <p> {{$dataincome}} </p>
-        <p> {{$dataexpense}} </p>
-        <p> {{$selectmonth}} </p>
-        <p> {{$expdate}} </p>
-        <p> {{$montanttotal}} </p>
-        <p> {{$may}} </p>
 
-
-    </div>
     
     <div style="display:flex; flex-direction:row">
         <div class="dropdown" style="width:50px">
@@ -24,15 +14,20 @@
             </ul>
         </div>
     </div>
-    <div>
-        <h2> Sort by </h2>
-        <button onClick="showChart('daily')"> Day </button>
-        <button onClick="showChart('monthly')"> Month </button>
-        <button onClick="showChart('yearly')"> Year </button>
-    </div>
+
 <div> 
-<canvas id="myChart" width="400" height="200"></canvas>
+    <h2> Sort by </h2>
+    <button onclick="showChart('daily')"> Day </button>
+    <button onclick="showChart('monthly')"> Month </button>
+    <button onclick="showChart('yearly')"> Year </button>
 </div>
+
+<canvas id="myChart" width="400" height="200"></canvas>
+
+
+</div>
+
+<!-- SCRIPT JS -->
 
 <script>  
 var month = <?php echo $month; ?>;
@@ -78,7 +73,7 @@ const myChart = new Chart(ctx, {
         labels: month,
         datasets: [{
             label: 'Incomes',
-            data: [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec],
+            data: [15, 14, 5, 4, 6, 10],
             backgroundColor:"transparent",
             borderColor: [
                 'rgba(255, 99, 132, 1)',
@@ -107,56 +102,42 @@ const myChart = new Chart(ctx, {
         }
     }
 });
+
+function showChart(type){
+        const dayslabel = [0,5,10,15,20,25,30];
+        const monthslabel = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+        const yearslabel = [2018, 2019, 2020, 2021, 2022, 2023];
+
+        const dataday = [3,0,0,42,0,32,7,12,2,24,5,9,12,0,0,0,27,18,0,0,0,0,21]
+        const datamonth = [4,12,21,45,32,43,6,43,21,34,21,14]
+        const datayear = [4,12,21,45,32,43,6,43,21,34,21,14]
+
+        if (type === 'monthly'){
+            myChart.config.type = 'line';
+            myChart.data.datasets[0].data = datamonth;
+            myChart.data.labels = monthslabel;
+        }
+
+        if (type === 'daily'){
+            myChart.data.datasets[0].data = dataday;
+            myChart.data.labels = dayslabel;
+            myChart.config.type = 'bar';
+        }
+
+        if (type === 'yearly'){
+            myChart.config.type = 'line';
+            myChart.data.datasets[0].data = datayear;
+            myChart.data.labels = yearslabel;
+        }
+
+        myChart.update()
+    }
 </script>
 
    
-</div>
 
-<script>
 
-    var month = <?php echo $month; ?>;
-    var income = <?php echo $dataincome; ?>;
-    var chartData = {
-        labels: month,
-        datasets: [{
-            label:'Income',
-            backgroundColor:"Yellow",
-            data: amountMonth
-        }]
-    }
 
-    window.onload = function showChart(type) {
-        if(type === 'monthly') {
-            var ctx= document.getElementById("canvas").getContect("2d");
-            window.myBar = new Chart(ctx, {
-                type: 'bar',
-                data:chartData,
-                options: {
-                    responsive:true,
-                    title: {
-                        display:true,
-                        text: " Income per month"
-                    }
-                }
-            })
-        }
-        if(type === 'daily') {
-            var ctx= document.getElementById("canvas").getContect("2d");
-            window.myBar = new Chart(ctx, {
-                type: 'bar',
-                data:chartData,
-                options: {
-                    responsive:true,
-                    title: {
-                        display:true,
-                        text: " Income per day"
-                    }
-                }
-            })
-        }
-    }
-
-</script>
 
 @endsection
 
