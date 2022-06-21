@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('expense', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->string('amount');
+            $table->bigInteger('amount');
             $table->date('date');
             $table->string('receipt');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');

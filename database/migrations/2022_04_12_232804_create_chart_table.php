@@ -15,6 +15,12 @@ return new class extends Migration
     {
         Schema::create('chart', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
+            $table->string('period')->nullable();
+            $table->date('from');
+            $table->date('to');
+            $table->foreignId('income_id')->nullable()->constrained('income')->onDelete('cascade');
+            $table->foreignId('expense_id')->nullable()->constrained('income')->onDelete('cascade');
             $table->timestamps();
         });
     }

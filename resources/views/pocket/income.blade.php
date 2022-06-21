@@ -6,9 +6,16 @@
     <div>
         <h1> Income </h1>
         <!-- Button trigger modal -->
+
+<div id="buttonspages">
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
   ADD NEW
 </button>
+<a type="button" class="btn btn-primary" href="{{ url('/chart') }}" >
+  GENERATE CHART
+</a>
+
+<div></div>
 
 <!--  Create Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

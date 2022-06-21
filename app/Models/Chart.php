@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chart extends Model
 {
+    protected $table = 'chart';
+
+    protected $fillable = ['type','period','from','to'];
+
     public function income() 
     {
         return $this->hasMany(Income::class, 'income_id');

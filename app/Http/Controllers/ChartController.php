@@ -8,6 +8,7 @@ use App\Models\Chart;
 use Cron\MonthField;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class ChartController extends Controller
 {
@@ -22,7 +23,16 @@ class ChartController extends Controller
      */
     public function index()
     {
-        $month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        $incomes = Income::pluck('amount','date');
+        $expenses = Expense::pluck('amount','date');
+
+        $income = $incomes->values();
+
+        $income = $income->toArray();
+        
+        return view('pocket.chart',compact('incomes','expenses','income'));
+        
+        /*** 
         $date = Income::select('date')->get();
         $selectmonth = Income::whereMonth('date','=','month')->get();
         $dataincome = Income::select('amount')->get()->sum('amount');
@@ -33,48 +43,51 @@ class ChartController extends Controller
         //Montant income total de tous les mois
         $montanttotal = DB::table('income')->get('income.amount')->sum('amount');
         //Montant total income du mois 05
-        $jan = DB::table('income')->whereMonth('date','01')->get('income.amount')->sum('amount');
-        $feb = DB::table('income')->whereMonth('date','02')->get('income.amount')->sum('amount');
-        $mar = DB::table('income')->whereMonth('date','03')->get('income.amount')->sum('amount');
-        $apr = DB::table('income')->whereMonth('date','04')->get('income.amount')->sum('amount');
-        $may = DB::table('income')->whereMonth('date','05')->get('income.amount')->sum('amount');
-        $jun = DB::table('income')->whereMonth('date','06')->get('income.amount')->sum('amount');
-        $jul = DB::table('income')->whereMonth('date','07')->get('income.amount')->sum('amount');
-        $aug = DB::table('income')->whereMonth('date','08')->get('income.amount')->sum('amount');
-        $sep = DB::table('income')->whereMonth('date','09')->get('income.amount')->sum('amount');
-        $oct = DB::table('income')->whereMonth('date','10')->get('income.amount')->sum('amount');
-        $nov = DB::table('income')->whereMonth('date','11')->get('income.amount')->sum('amount');
-        $dec = DB::table('income')->whereMonth('date','12')->get('income.amount')->sum('amount');
-         
+
+        $yeara = DB::table('income')->whereYear('date','2018')->get('income.amount')->sum('amount');
+        $yearb = DB::table('income')->whereYear('date','2019')->get('income.amount')->sum('amount');
+        $yearc = DB::table('income')->whereYear('date','2020')->get('income.amount')->sum('amount');
+        $yeard = DB::table('income')->whereYear('date','2021')->get('income.amount')->sum('amount');
+        $yeare = DB::table('income')->whereYear('date','2022')->get('income.amount')->sum('amount');
+
+        $yearsamount = array($yeara,$yearb,$yearc,$yeard,$yeare);   
+
         // TESTS
-        $annees = ['2018','2019','2020','2021','2022'];
-        $mois = ['01','02','03','04','05','06','07','08','09','10','11','12'];
-        $jours = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'];
+        $days = array('1','2','3','4','5','6','7','8','9','10');
+        $months = array('01','02','03','04','05','06','07','08','09','10','11','12');
+        $years = array('2018','2019','2020','2021','2022');
 
-            foreach($annees as $annee){
-                $amountYear = DB::table('income')->whereYear('date',$annee)->get('income.amount')->sum('amount');
-                foreach($mois as $moi) {
-                    $amountMonth = DB::table('income')->whereYear('date',$annee)->whereMonth('date',$moi)->get('income.amount')->sum('amount');
-                    foreach($jours as $jour){
-                        $amountDay = DB::table('income')->whereYear('date',$annee)->whereMonth('date',$moi)->whereDay('date',$jour)->get('income.amount')->sum('amount');
-                    }
+        foreach ($months as $month){
+            $query = DB::table('income')->whereMonth('date',$month)->get('income.amount');
+        }
+
+
+
+        foreach($years as $year){
+            $amountYearInc = DB::table('income')->whereYear('date',$year)->get('income.amount');
+            foreach($months as $month) {
+                $amountMonthInc = DB::table('income')->whereYear('date',$year)->whereMonth('date',$month)->get('income.amount')->sum('amount');
+                foreach($days as $day){
+                    $amountDayInc = DB::table('income')->whereYear('date',$year)->whereMonth('date',$month)->whereDay('date',$day)->get('income.amount')->sum('amount');
                 }
             }
+        }
 
-            foreach($annees as $annee){
-                $amountYear = DB::table('expense')->whereYear('date',$annee)->get('expense.amount')->sum('amount');
-                foreach($mois as $moi) {
-                    $amountMonth = DB::table('expense')->whereYear('date',$annee)->whereMonth('date',$moi)->get('expense.amount')->sum('amount');
-                    foreach($jours as $jour){
-                        $amountDay = DB::table('expense')->whereYear('date',$annee)->whereMonth('date',$moi)->whereDay('date',$jour)->get('expense.amount')->sum('amount');
-                    }
+        foreach($years as $year){
+            $amountYearExp = DB::table('expense')->whereYear('date',$year)->get('expense.amount')->sum('amount');
+            foreach($months as $month) {
+                $amountMonthExp = DB::table('expense')->whereYear('date',$year)->whereMonth('date',$month)->get('expense.amount')->sum('amount');
+                foreach($days as $day){
+                    $amountDayExp = DB::table('expense')->whereYear('date',$year)->whereMonth('date',$month)->whereDay('date',$day)->get('expense.amount')->sum('amount');
                 }
             }
+        }               
             
-
-            
-            
-        return view('pocket.chart', compact('dataincome','dataexpense','incomedate','expdate','selectmonth','montanttotal','jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec','amountMonth'))->with('month',json_encode($month,JSON_NUMERIC_CHECK));
+        return view('pocket.chart', compact('amountDayInc','amountMonthInc','amountYearInc','amountDayExp','amountMonthExp','amountYearExp','query','yeara','yearb','yearc','yeard','yeare','yearsamount'))
+        ->with('days',json_encode($days,JSON_NUMERIC_CHECK))
+        ->with('years',json_encode($years,JSON_NUMERIC_CHECK))
+        ->with('months',json_encode($days,JSON_NUMERIC_CHECK));
+        */
     }
 
      /**
@@ -84,7 +97,10 @@ class ChartController extends Controller
      */
     public function create()
     {
-        //
+        $chart = Chart::all();
+        $income = Income::all();
+        $expense = Expense::all();
+        return view('pocket.chart', compact('chart','income','expense'));
     }
 
     /**
@@ -95,7 +111,14 @@ class ChartController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $chartdata = Chart::create([
+            'type' => $request->type,
+            'period' => $request->period,
+            'from' => $request->from,
+            'to' => $request->to,
+        ]);
+        Session::put('message', 'Chart created ');
+        return view('home')->with('message','Chart created successfully');
     }
 
     /**
@@ -104,10 +127,7 @@ class ChartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+    
 
     /**
      * Show the form for editing the specified resource.
