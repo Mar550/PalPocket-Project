@@ -36,9 +36,9 @@ Route::prefix('expense')->group(function(){
     Route::delete('delete/{id}', [App\Http\Controllers\ExpenseController::class,'destroy'])->name('expense.delete');
 });
 
-Route::get('chart', [App\Http\Controllers\ChartController::class, 'index'])->name('chart');
 
 Route::prefix('chart')->group(function(){
     Route::get('index', [App\Http\Controllers\ChartController::class, 'index'])->name('chart.index');
+    Route::get('create', [App\Http\Controllers\ChartController::class,'create'])->name('chart.create');
     Route::post('store', [App\Http\Controllers\ChartController::class, 'store'])->name('chart.store');
 });

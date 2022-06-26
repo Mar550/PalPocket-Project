@@ -11,6 +11,9 @@ class Expense extends Model
 
     protected $table = 'expense';
 
+    protected $dateFormat = 'Y-m-d H:i:s.uO';
+
+
     public function user() 
     {
         return $this->belongsTo(User::class, 'user_id');

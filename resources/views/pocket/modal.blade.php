@@ -19,7 +19,8 @@
                         <option selected> Choose an option </option>
                         <option value="1"> Income </option>
                         <option value="2"> Expense </option>
-                        <option value="3"> Gross Revenue </option>
+                        <option value="3"> Income & Expense </option>
+                        <option value="4"> Gross Revenue </option>
                     </select>
                 </div>
                 <br>
@@ -50,7 +51,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit"  class="btn btn-primary"> Create </button>
+                    <button type="submit"  class="btn btn-primary"> View </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
 

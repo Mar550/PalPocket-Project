@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Income;
 use App\Models\Expense;
 use App\Models\Chart;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Cron\MonthField;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -23,14 +26,80 @@ class ChartController extends Controller
      */
     public function index()
     {
+       
+        $chart = DB::table('chart')->orderBy('created_at','desc')->first();
+
         $incomes = Income::pluck('amount','date');
         $expenses = Expense::pluck('amount','date');
 
         $income = $incomes->values();
-
-        $income = $income->toArray();
+        $expense = $expenses->values();
         
-        return view('pocket.chart',compact('incomes','expenses','income'));
+        $daysInc = Income::selectRaw('DAY(income.date) AS day')->orderByRaw('date ASC')->groupBy('day')->pluck('day');
+        $monthsInc = Income::selectRaw('MONTH(income.date) AS month')->orderByRaw('date ASC')->groupBy('month')->pluck('month');
+        $yearsInc = Income::selectRaw('YEAR(income.date) AS year')->orderByRaw('date ASC')->groupBy('year')->pluck('year');
+
+        $array = (array) $yearsInc;
+
+        // Income of each year 
+        foreach ($yearsInc as $yearInc){
+            $incomeYears = Income::select(DB::raw('sum(income.amount) as amount'),DB::raw('YEAR(income.date) as year'))
+            ->orderByRaw('year ASC')
+            ->groupBy('year')
+            ->pluck('amount');
+        }
+        
+        // Income of each month of each year
+        $incomeMonths = Income::select(DB::raw('sum(income.amount) as amount'),DB::raw('month(income.date) AS month'),DB::raw('year(income.date) as year'))
+        ->orderByRaw('year ASC')
+        ->groupBy('date')
+        ->get();
+
+        // Income of each day 
+        $incomeDays = Income::select(DB::raw('sum(income.amount) as amount'),
+        DB::raw('day(income.date) AS day'),
+        DB::raw('month(income.date) AS month'),
+        DB::raw('year(income.date) AS year'))
+        ->orderByRaw('year ASC')
+        ->groupBy('date')
+        ->get();
+
+        if(Chart::exists()) {
+            switch ($chart->type){
+                case(1):
+                    echo("type 1");
+                    switch($chart->period){
+                        case(1):
+                            $labels = $daysInc;
+                            $startDate = $chart->from;
+                            $endDate = $chart->to;
+                            $daterange = Income::whereBetween('date', [$startDate, $endDate])->get();
+                            break;
+                        case(2):
+                            $labels = $monthsInc;
+                            $startDate = $chart->from;
+                            $endDate = $chart->to;
+                            $daterange = Income::whereBetween('date', [$startDate, $endDate])->get();
+                            break;
+                        case(3):
+                            $labels = $yearsInc;
+                            $startDate = $chart->from;
+                            $endDate = $chart->to;
+                            $daterange = Income::whereBetween('date', [$startDate, $endDate])->get();
+                            break;
+                    }
+                    break;
+                case(2):
+                    echo("type 2");
+                    break;
+            }
+
+            
+        }
+
+        
+        
+        return view('pocket.chart',compact('incomes','expenses','income','expense','yearsInc','array','incomeYears','incomeMonths','incomeDays','chart','daterange'));
         
         /*** 
         $date = Income::select('date')->get();
@@ -88,6 +157,7 @@ class ChartController extends Controller
         ->with('years',json_encode($years,JSON_NUMERIC_CHECK))
         ->with('months',json_encode($days,JSON_NUMERIC_CHECK));
         */
+        
     }
 
      /**
@@ -97,10 +167,11 @@ class ChartController extends Controller
      */
     public function create()
     {
-        $chart = Chart::all();
         $income = Income::all();
         $expense = Expense::all();
-        return view('pocket.chart', compact('chart','income','expense'));
+        $chart = Chart::all();
+
+        return view('pocket.modal', compact('chart','income','expense'));
     }
 
     /**

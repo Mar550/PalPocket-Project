@@ -26,12 +26,14 @@ class SampleChart extends BaseChart
         $expenses = Expense::pluck('amount','date');
 
         $income = $incomes->values();
+        $expense = $expenses->values();
 
+        
 
         return Chartisan::build()
-            ->labels($income)
-            ->dataset('Income', [1, 2, 3])
-            ->dataset('Expense', [3, 2, 1]);
+            ->labels(['2018','2019','2020','2021','2022'])
+            ->dataset('Income', $income->toArray())
+            ->dataset('Expense', $expense->toArray());
 
     }
 

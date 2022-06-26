@@ -11,6 +11,8 @@ class Chart extends Model
 
     protected $fillable = ['type','period','from','to'];
 
+    protected $dateFormat = 'Y-m-d H:i:s.uO';
+
     public function income() 
     {
         return $this->hasMany(Income::class, 'income_id');

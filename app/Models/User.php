@@ -27,6 +27,8 @@ class User extends Authenticatable
         'avatar',
     ];
 
+    protected $dateFormat = 'Y-m-d H:i:s.uO';
+
     /**
      * The attributes that should be hidden for serialization.
      *
