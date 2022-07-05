@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('income', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->bigInteger('amount');
+            $table->bigInteger('amount')->default('0');
             $table->date('date');
             $table->string('receipt')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');

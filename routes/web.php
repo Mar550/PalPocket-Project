@@ -39,6 +39,7 @@ Route::prefix('expense')->group(function(){
 
 Route::prefix('chart')->group(function(){
     Route::get('index', [App\Http\Controllers\ChartController::class, 'index'])->name('chart.index');
+    Route::get('indexjs', [App\Http\Controllers\ChartController::class, 'indexjs'])->name('chart.indexjs');
     Route::get('create', [App\Http\Controllers\ChartController::class,'create'])->name('chart.create');
     Route::post('store', [App\Http\Controllers\ChartController::class, 'store'])->name('chart.store');
 });
